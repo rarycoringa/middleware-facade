@@ -21,4 +21,5 @@ class ServiceInterface(ABC):
             base_url: str = os.environ["ACCOUNT_SERVICE_URL"]
         except KeyError:
             base_url: str = f"{self.protocol()}://{self.host()}:{self.port()}"
+        
         return base_url

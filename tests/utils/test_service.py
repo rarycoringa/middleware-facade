@@ -44,6 +44,10 @@ class TestServiceInterface:
 
         assert isinstance(service, ServiceInterface)
 
+    @mock.patch.dict(
+        os.environ,
+        {},
+    )
     def test_method_base_url_built_from_abstract_methods(self):
         service = DummyServiceWithMethods()
 
