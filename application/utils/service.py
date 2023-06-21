@@ -1,22 +1,24 @@
+import os
+
 from abc import ABC, abstractmethod
 from typing import Tuple
 
 class ServiceInterface(ABC):
     @abstractmethod
-    def protocol(self) -> str:
+    def protocol() -> str:
         raise NotImplementedError()
     
     @abstractmethod
-    def host(self) -> str:
+    def host() -> str:
         raise NotImplementedError()
 
     @abstractmethod
-    def port(self) -> int:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def get_auth(self) -> Tuple[str, str]:
+    def port() -> int:
         raise NotImplementedError()
 
     def base_url(self) -> str:
-        return f"{self.protocol()}://{self.host()}:{self.port()}"
+        try:
+            base_url: str = os.environ["ACCOUNT_SERVICE_URL"]
+        except KeyError:
+            base_url: str = f"{self.protocol()}://{self.host()}:{self.port()}"
+        return base_url
