@@ -1,4 +1,4 @@
 from application.utils.service import ServiceInterface
 
-class PublicationsService(ServiceInterface):
+class PublicationService(ServiceInterface):
     ...
