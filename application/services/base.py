@@ -1,9 +1,9 @@
 import os
 
 from abc import ABC, abstractmethod
-from typing import Tuple
 
-class ServiceInterface(ABC):
+class BaseService(ABC):
+
     @abstractmethod
     def protocol() -> str:
         raise NotImplementedError()
@@ -16,9 +16,14 @@ class ServiceInterface(ABC):
     def port() -> int:
         raise NotImplementedError()
 
+    @abstractmethod
+    def url_env_var() -> str:
+        raise NotImplementedError()
+
+    @property
     def base_url(self) -> str:
         try:
-            base_url: str = os.environ["ACCOUNT_SERVICE_URL"]
+            base_url: str = os.environ[self.url_env_var()]
         except KeyError:
             base_url: str = f"{self.protocol()}://{self.host()}:{self.port()}"
         
