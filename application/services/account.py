@@ -1,13 +1,12 @@
 import requests
 
 from enum import Enum
+from typing import List
 
 from application.services.base import BaseService
-
-class UserRetrievalTypeEnum(Enum):
-    ID: str = "ID"
-    CPF: str = "CPF"
-    CNPJ: str = "CNPJ"
+from application.models.users import User
+from application.models.users import UserCreation
+from application.models.users import Document
 
 class AccountService(BaseService):
 
@@ -23,116 +22,112 @@ class AccountService(BaseService):
     def url_env_var(self) -> str:
         return "ACCOUNT_SERVICE_URL"
 
-    def retrieve_users(self):
+    def retrieve_users(self) -> List[User]:
         url: str = f"{self.base_url}/users"
 
         response: requests.Response = requests.get(url)
         response.raise_for_status()
 
-        return response.json()
+        users: List[User] = [
+            User.from_service_format(user)
+            for user in response.json()
+        ]
 
-    def _retrieve_user(self, value: str, type: UserRetrievalTypeEnum):
-        match type:
-            case UserRetrievalTypeEnum.ID:
-                url: str = f"{self.base_url}/users/{value}"
-            case UserRetrievalTypeEnum.CPF:
-                url: str = f"{self.base_url}/users/cpf/{value}"
-            case UserRetrievalTypeEnum.CNPJ:
-                url: str = f"{self.base_url}/users/cnpj/{value}"
-        
+        return users
+
+    def retrieve_user(self, id: str) -> User:
+        url: str = f"{self.base_url}/users/{id}"
+
         response: requests.Response = requests.get(url)
         response.raise_for_status()
 
-        return response.json()
+        user: User = User.from_service_format(response.json())
 
-    def retrieve_user_by_id(self, id: str):
-        type: UserRetrievalTypeEnum = UserRetrievalTypeEnum.ID
+        return user
 
-        return self._retrieve_user(value=id, type=type)
+    def retrieve_user_by_document(self, document: Document) -> User:
+        url: str = f"{self.base_url}/users/{document.type.value.lower()}/{document.number}"
 
-    def retrieve_user_by_cpf(self, cpf: str):
-        type: UserRetrievalTypeEnum = UserRetrievalTypeEnum.CPF
-
-        return self._retrieve_user(value=cpf, type=type)
-
-    def retrieve_user_by_cnpj(self, cnpj: str):
-        type: UserRetrievalTypeEnum = UserRetrievalTypeEnum.CNPJ
-
-        return self._retrieve_user(value=cnpj, type=type)
-
-    def retrieve_user_apps_by_id(self, id: str):
-        url = f"{self.base_url}/users/{id}/apps"
-
-        response = requests.get(url)
+        response: requests.Response = requests.get(url)
         response.raise_for_status()
 
-        return response.json()
+        user: User = User.from_service_format(response.json())
 
-    def create_user(self, user: dict):
+    # def retrieve_user_apps_by_id(self, id: str):
+    #     url = f"{self.base_url}/users/{id}/apps"
+
+    #     response = requests.get(url)
+    #     response.raise_for_status()
+
+    #     return response.json()
+
+    def create_user(self, user_creation: UserCreation) -> User:
         url = f"{self.base_url}/users"
 
-        response = requests.post(url, json=user)
+        response = requests.post(url, json=user_creation.to_service_format())
         response.raise_for_status()
 
-        return response.json()
+        user: User = User.from_service_format(response.json())
 
-    def create_user_with_app(self, user: dict, app: dict):
-        url = f"{self.base_url}/users/with-app"
+        return user
 
-        user_with_app = {
-            "user": user,
-            "app": app,
-        }
+    # def create_user_with_app(self, user: dict, app: dict):
+    #     url = f"{self.base_url}/users/with-app"
 
-        response = requests.post(url, json=user_with_app)
-        response.raise_for_status()
+    #     user_with_app = {
+    #         "user": user,
+    #         "app": app,
+    #     }
 
-        return response.json()
+    #     response = requests.post(url, json=user_with_app)
+    #     response.raise_for_status()
 
-    def update_user(self, user: dict):
+    #     return response.json()
+
+    def update_user(self, user: User) -> User:
         url = f"{self.base_url}/users"
 
-        response = requests.put(url, json=user)
+        response = requests.put(url, json=user.to_service_format())
         response.raise_for_status()
 
-        return response.json()
+        user: User = User.from_service_format(response.json())
 
-    def delete_user(self):
+        return user
+
+    def delete_user(self, id: str) -> None:
         url = f"{self.base_url}/users/{id}"
 
         response = requests.delete(url)
         response.raise_for_status()
 
-        return response.json()
+    # def retrieve_apps_by_user_id(self, id: str):
+    #     url = f"{self.base_url}/apps/{id}"
 
-    def retrieve_apps_by_user_id(self, id: str):
-        url = f"{self.base_url}/apps/{id}"
+    #     response = requests.get(url)
+    #     response.raise_for_status()
 
-        response = requests.get(url)
-        response.raise_for_status()
+    #     return response.json()
 
-        return response.json()
+    # def create_app(self, app: dict):
+    #     url = f"{self.base_url}/apps"
 
-    def create_app(self, app: dict):
-        url = f"{self.base_url}/apps"
+    #     response = requests.post(url, json=app)
+    #     response.raise_for_status()
 
-        response = requests.post(url, json=app)
-        response.raise_for_status()
+    #     return response.json()
 
-        return response.json()
+    # def update_app(self, app: dict):
+    #     url = f"{self.base_url}/apps"
 
-    def update_app(self, app: dict):
-        url = f"{self.base_url}/apps"
+    #     response = requests.put(url, json=app)
+    #     response.raise_for_status()
 
-        response = requests.put(url, json=app)
-        response.raise_for_status()
+    #     return response.json()
 
-        return response.json()
+    # def delete_app(self, id: str):
+    #     url = f"{self.base_url}/apps/{id}"
 
-    def delete_app(self, id: str):
-        url = f"{self.base_url}/apps/{id}"
+    #     response = requests.delete(url)
+    #     response.raise_for_status()
 
-        response = requests.delete(url)
-        response.raise_for_status()
-
-        return response.json()
+    #     return response.json()
