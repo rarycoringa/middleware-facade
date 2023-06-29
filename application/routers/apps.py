@@ -41,7 +41,7 @@ async def retrieve_apps_by_user_id(user_id: str) -> List[App]:
     response_model=App,
     status_code=201,
     summary="Create app",
-    description="Create an app by passing app information."
+    description="Create an app by passing app information.",
 )
 async def create_app(app_creation: AppCreation) -> App:
     try:
@@ -56,7 +56,7 @@ async def create_app(app_creation: AppCreation) -> App:
     response_model=App,
     status_code=201,
     summary="Update app",
-    description="Update an app information by passing new values."
+    description="Update an app information by passing new values.",
 )
 async def update_app(app: App) -> App:
     try:

@@ -62,7 +62,7 @@ async def retrieve_user(id: str) -> User:
         " These document types below are available to be retrieved by:"
         "\n- CPF"
         "\n- CNPJ"
-    )
+    ),
 )
 async def retrieve_user_by_document(type: DocumentType, number: str) -> User:
     try:
@@ -77,7 +77,7 @@ async def retrieve_user_by_document(type: DocumentType, number: str) -> User:
     response_model=User,
     status_code=201,
     summary="Create user",
-    description="Create an user by passing user information."
+    description="Create an user by passing user information.",
 )
 async def create_user(user_creation: UserCreation) -> User:
     try:
@@ -92,7 +92,7 @@ async def create_user(user_creation: UserCreation) -> User:
     response_model=User,
     status_code=201,
     summary="Update user",
-    description="Update an user information by passing new values."
+    description="Update an user information by passing new values.",
 )
 async def update_user(user: User) -> User:
     try:

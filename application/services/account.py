@@ -77,7 +77,7 @@ class AccountService(BaseService):
         return user
 
     def create_user_with_app(self, user: User, app: App) -> NoReturn:
-        uri: str = f"{self.base_url}/users/with-app"
+        url: str = f"{self.base_url}/users/with-app"
 
         raise NotImplemented(
             "Feature already satisfied with other methods."
