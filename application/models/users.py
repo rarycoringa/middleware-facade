@@ -25,7 +25,7 @@ class Document(BaseModel):
         allowed_length: int = CPF_LENGTH if type == DocumentType.CPF else CNPJ_LENGTH
 
         if len(value) != allowed_length:
-            raise ValueError(f"a \'{type.value}\' must have exactly {allowed_length}.")
+            raise ValueError(f"\'{type.value}\' property must have exactly {allowed_length} characters.")
         
         return value
 
