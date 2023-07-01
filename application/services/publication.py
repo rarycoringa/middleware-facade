@@ -1,13 +1,10 @@
-from enum import Enum
-
 import requests
 
+from typing import List
+
 from application.services.base import BaseService
+from application.models.publication import Publication
 
-
-class UserRetrievalTypeEnum(Enum):
-    PUB_ID: int = "PUB_ID"
-    USER: str = "USER"
 
 class PublicationService(BaseService):
 
@@ -23,50 +20,74 @@ class PublicationService(BaseService):
     def url_env_var(self) -> str:
         return "PUBLICATION_SERVICE_URL"
 
-    def retrieve_pubs(self ):
+
+#Para todas as publicações
+    def retrieve_pubs(self ) -> List[Publication]:
         url: str = f"{self.base_url}/pubs"
 
         response: requests.Response = requests.get(url)
         response.raise_for_status()
 
-        return response.json()
+        pubs: List[Publication] = [
+            Publication.formater_of_response(publication)
+            for publication in response.json()
+        ]
+
+        return pubs
     
-    def retrieve_user_pubs_by_pub_id(self, pub_id: str):
+
+#Para determinada publicação pelo ID da publicação
+    def retrieve_pub(self, pub_id: int) -> Publication:
         url = f"{self.base_url}/pubs/{pub_id}"
 
-        response = requests.get(url)
+        response = requests.Response = requests.get(url)
         response.raise_for_status()
 
-        return response.json()
+        pub: Publication = Publication.formater_of_response(response.json())
+
+        return pub
     
-    def retrieve_pubs_by_user(self, user: str):
+
+#Para retornar todas as publicações de um mesmo usuário
+    def retrieve_pubs_by_user(self, user: str) -> List[Publication]:
         url = f"{self.base_url}/pubs/user/{user}"
 
-        response = requests.get(url)
+        response: requests.Response = requests.get(url)
         response.raise_for_status()
 
-        return response.json()
+        pubs_user: List[Publication] = [
+            Publication.formater_of_response(publication)
+            for publication in response.json()
+        ]
 
-    def create_pubs(self, user: dict):
+        return pubs_user
+
+
+#Para salvar uma publicação
+    def create_pub(self, pub: Publication):
         url = f"{self.base_url}/pubs"
 
-        response = requests.post(url, json=user)
+        response = requests.post(url, json=pub.formater_of_response())
         response.raise_for_status()
 
-        return response.json()
+        pub_create: Publication = Publication.formater_of_response(response.json())
 
-    def update_pubs(self, user: dict):
+        return pub_create
+
+
+#Para atualizar uma publicação
+    def update_pub(self, pub: dict):
         url = f"{self.base_url}/pubs"
 
-        response = requests.put(url, json=user)
+        response = requests.put(url, json=pub)
         response.raise_for_status()
 
         return response.json()
 
-    def delete_pubs_by_pub_id(self, pub_id: str):
+
+#Para deletar uma publicação pelo ID da publicação
+    def delete_pub_by_pub_id(self, pub_id: int) -> None:
         url = f"{self.base_url}/pubs/{pub_id}"
 
         response = requests.delete(url)
         response.raise_for_status()
-
-        return response.json()
