@@ -18,20 +18,20 @@ class IDs(baseModel):
         return formater_of_request
 
     
-class Dashboard_data:
+class TwitterDashboardData:
     user_id = str
-    graph_likes_by_post = str
-    graph_average_likes = str
+    graph_likes_by_post = bytes
+    graph_average_likes = bytes
 
     @classmethod
-    def formater_of_response(cls, service_data:Dict[str, any]) -> Dashboard_data:
-        dashboard_data = Dict[str, any] = {
+    def formater_of_response(cls, service_data:Dict[str, any]) -> TwitterDashboardData:
+        twitter_dashboard_data = Dict[str, any] = {
             "user_id": service_data["idUsuario"],
             "graph_likes_by_post": service_data["GraficoLikesPorPostagem"],
             "graph_average_likes": service_data["GráficoLinhaMediaLikesPorDia"],
         }
 
-        return cls.parse_obj(dashboard_data)
+        return cls.parse_obj(twitter_dashboard_data)
 
         
 

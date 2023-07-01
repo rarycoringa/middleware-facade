@@ -2,7 +2,7 @@ import requests
 
 from application.services.base import BaseService
 from application.models.bi import IDs
-from application.models.bi import Dashboard_data
+from application.models.bi import TwitterDashboardData
 
 class BIService(BaseService):
 
@@ -18,13 +18,13 @@ class BIService(BaseService):
     def url_env_var(self) -> str:
      return "BI_SERVICE_URL"
 
-    def refresh_dash_twitter(self, ids: IDs) -> Dashboard_data:
+    def retrieve_twitter_dashboard_data(self, ids: IDs) -> TwitterDashboardData:
         
         url: str = f"{self.base_url}/atualizarDashTwitter"
 
         response: requests.Response = requests.get(url, json=ids.formater_of_request())
         response.raise_for_status()
 
-        dashboard_data: Dashboard_data = Dashboard_data.formater_of_response(response.json())
+        twitter_dashboard_data: TwitterDashboardData = TwitterDashboardData.formater_of_response(response.json())
 
-        return dashboard_data
+        return twitter_dashboard_data

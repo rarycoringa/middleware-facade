@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi import HTTPException
 
 from application.models.bi import IDs
-from application.models.bi import Dashboard_data
+from application.models.bi import TwitterDashboardData
 from application.services.bi import BIService
 
 
@@ -17,18 +17,18 @@ router = APIRouter(
 
 @router.get(
     path = "",
-    reponse_model=Dashboard_data,
+    reponse_model=TwitterDashboardData,
     status_code=200,
     summary="Refresh Twitter dashboard",
 )
 
-async def refresh_twitter_dashboard(ids: IDs) -> Dashboard_data:
+async def refresh_twitter_dashboard(ids: IDs) -> TwitterDashboardData:
     try:
-        dashboard_data: Dashboard_data = BIService().refresh_twitter_dashboard(ids)
+        twitter_dashboard_data: TwitterDashboardData = BIService().refresh_twitter_dashboard(ids)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status)
     
-    return dashboard_data
+    return twitter_dashboard_data
 
 
 
