@@ -1,6 +1,7 @@
 import requests
 
 from typing import List
+from typing import NoReturn
 
 from fastapi import APIRouter
 from fastapi import HTTPException
@@ -10,11 +11,15 @@ from application.models.users import User
 from application.models.users import UserCreation
 from application.models.users import DocumentType
 
-users_tag: str = "Users"
+tag: str = "Users"
+
+description: str = """
+
+"""
 
 router = APIRouter(
     prefix="/users",
-    tags=[users_tag],
+    tags=[tag],
 )
 
 @router.get(
@@ -22,7 +27,7 @@ router = APIRouter(
     response_model=List[User],
     status_code=200,
     summary="Retrieve all users",
-    description="Retrieve a list containing all available users.",
+    description="Retrieve a list containing all registered users.",
 )
 async def retrieve_users() -> List[User]:
     try:
@@ -67,18 +72,12 @@ async def retrieve_user_by_document(type: DocumentType, number: str) -> User:
 
     return user
 
-# @router.get(
-#     path="/{id}/apps",
-# )
-# async def retrieve_user_apps_by_id(id: str):
-#     return AccountService().retrieve_user_apps_by_id(id)
-
 @router.post(
     path="",
     response_model=User,
     status_code=201,
     summary="Create user",
-    description="Create an user by passing user informations."
+    description="Create an user by passing user information."
 )
 async def create_user(user_creation: UserCreation) -> User:
     try:
@@ -87,12 +86,6 @@ async def create_user(user_creation: UserCreation) -> User:
         raise HTTPException(error.response.status_code)
 
     return user
-
-# @router.post(
-#     path="/withapp",
-# )
-# async def create_user_with_app(userwithapp):
-#     return AccountService().create_user_with_app(user.user, user.app)
 
 @router.put(
     path="",
@@ -116,8 +109,8 @@ async def update_user(user: User) -> User:
     summary="Delete user",
     description="Delete an user by passing user ID.",
 )
-async def delete_user(id: str) -> None:
+async def delete_user(id: str) -> NoReturn:
     try:
-        user: User = AccountService().delete_user(id)
+        AccountService().delete_user(id)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status_code)
