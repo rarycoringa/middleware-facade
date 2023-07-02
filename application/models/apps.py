@@ -38,6 +38,8 @@ class App(BaseModel):
             "user_id": service_data["userId"],
         }
 
+        return cls.parse_obj(app_data)
+
     def to_service_format(self) -> Dict[str, Any]:
         service_format: Dict[str, Any] = {
             "id": self.id,

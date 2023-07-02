@@ -6,7 +6,7 @@ from typing import NoReturn
 from fastapi import APIRouter
 from fastapi import HTTPException
 
-from application.services.account import AccountService
+from application.services.accounts import AccountService
 from application.models.apps import App
 from application.models.apps import AppCreation
 
