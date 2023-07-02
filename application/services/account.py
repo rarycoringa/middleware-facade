@@ -57,30 +57,28 @@ class AccountService(BaseService):
 
         return user
 
-    def retrieve_user_apps_by_user_id(self, user_id: str) -> List[App]:
-        url = f"{self.base_url}/users/{user_id}/apps"
+    def retrieve_user_apps_by_user_id(self, user_id: str) -> NoReturn:
+        url: str = f"{self.base_url}/users/{user_id}/apps"
 
-        response = requests.get(url)
-        response.raise_for_status()
-
-        apps: List[App] = [
-            App.from_service_format(app)
-            for app in response.json()
-        ]
-
-        return apps
+        raise NotImplemented(
+            "Feature already satisfied with other methods."
+            " Should not be implemented at the moment to avoid"
+            " unnecessary complexity."
+        )
 
     def create_user(self, user_creation: UserCreation) -> User:
-        url = f"{self.base_url}/users"
+        url: str = f"{self.base_url}/users"
 
-        response = requests.post(url, json=user_creation.to_service_format())
+        response: requests.Response = requests.post(url, json=user_creation.to_service_format())
         response.raise_for_status()
 
         user: User = User.from_service_format(response.json())
 
         return user
 
-    def create_user_with_app(self, user: User, app: App) -> NoReturn:   
+    def create_user_with_app(self, user: User, app: App) -> NoReturn:
+        uri: str = f"{self.base_url}/users/with-app"
+
         raise NotImplemented(
             "Feature already satisfied with other methods."
             " Should not be implemented at the moment to avoid"
@@ -88,9 +86,9 @@ class AccountService(BaseService):
         )
 
     def update_user(self, user: User) -> User:
-        url = f"{self.base_url}/users"
+        url: str = f"{self.base_url}/users"
 
-        response = requests.put(url, json=user.to_service_format())
+        response: requests.Response = requests.put(url, json=user.to_service_format())
         response.raise_for_status()
 
         user: User = User.from_service_format(response.json())
@@ -98,15 +96,15 @@ class AccountService(BaseService):
         return user
 
     def delete_user(self, id: str) -> NoReturn:
-        url = f"{self.base_url}/users/{id}"
+        url: str = f"{self.base_url}/users/{id}"
 
-        response = requests.delete(url)
+        response: requests.Response = requests.delete(url)
         response.raise_for_status()
 
     def retrieve_apps_by_user_id(self, user_id: str) -> List[App]:
-        url = f"{self.base_url}/apps/{user_id}"
+        url: str = f"{self.base_url}/apps/{user_id}"
 
-        response = requests.get(url)
+        response: requests.Response = requests.get(url)
         response.raise_for_status()
 
         apps: List[App] = [
@@ -117,9 +115,9 @@ class AccountService(BaseService):
         return apps
 
     def create_app(self, app_creation: AppCreation) -> App:
-        url = f"{self.base_url}/apps"
+        url: str = f"{self.base_url}/apps"
 
-        response = requests.post(url, json=app_creation.to_service_format())
+        response: requests.Response = requests.post(url, json=app_creation.to_service_format())
         response.raise_for_status()
 
         app: App = App.from_service_format(response.json())
@@ -127,9 +125,9 @@ class AccountService(BaseService):
         return app
 
     def update_app(self, app: App) -> App:
-        url = f"{self.base_url}/apps/{app.id}"
+        url: str = f"{self.base_url}/apps/{app.id}"
 
-        response = requests.put(url, json=app.to_service_format())
+        response: requests.Response = requests.put(url, json=app.to_service_format())
         response.raise_for_status()
 
         app: App = App.from_service_format(response.json())
@@ -137,7 +135,7 @@ class AccountService(BaseService):
         return app
 
     def delete_app(self, id: str) -> NoReturn:
-        url = f"{self.base_url}/apps/{id}"
+        url: str = f"{self.base_url}/apps/{id}"
 
-        response = requests.delete(url)
+        response: requests.Response = requests.delete(url)
         response.raise_for_status()
