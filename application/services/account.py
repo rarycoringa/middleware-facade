@@ -1,12 +1,14 @@
 import requests
 
-from enum import Enum
 from typing import List
+from typing import NoReturn
 
 from application.services.base import BaseService
 from application.models.users import User
 from application.models.users import UserCreation
 from application.models.users import Document
+from application.models.apps import App
+from application.models.apps import AppCreation
 
 class AccountService(BaseService):
 
@@ -53,6 +55,8 @@ class AccountService(BaseService):
 
         user: User = User.from_service_format(response.json())
 
+        return user
+
     # def retrieve_user_apps_by_id(self, id: str):
     #     url = f"{self.base_url}/users/{id}/apps"
 
@@ -94,40 +98,47 @@ class AccountService(BaseService):
 
         return user
 
-    def delete_user(self, id: str) -> None:
+    def delete_user(self, id: str) -> NoReturn:
         url = f"{self.base_url}/users/{id}"
 
         response = requests.delete(url)
         response.raise_for_status()
 
-    # def retrieve_apps_by_user_id(self, id: str):
-    #     url = f"{self.base_url}/apps/{id}"
+    def retrieve_apps_by_user_id(self, user_id: str) -> List[App]:
+        url = f"{self.base_url}/apps/{user_id}"
 
-    #     response = requests.get(url)
-    #     response.raise_for_status()
+        response = requests.get(url)
+        response.raise_for_status()
 
-    #     return response.json()
+        apps: List[App] = [
+            App.from_service_format(app)
+            for app in response.json()
+        ]
 
-    # def create_app(self, app: dict):
-    #     url = f"{self.base_url}/apps"
+        return apps
 
-    #     response = requests.post(url, json=app)
-    #     response.raise_for_status()
+    def create_app(self, app_creation: AppCreation) -> App:
+        url = f"{self.base_url}/apps"
 
-    #     return response.json()
+        response = requests.post(url, json=app_creation.to_service_format())
+        response.raise_for_status()
 
-    # def update_app(self, app: dict):
-    #     url = f"{self.base_url}/apps"
+        app: App = App.from_service_format(response.json())
 
-    #     response = requests.put(url, json=app)
-    #     response.raise_for_status()
+        return app
 
-    #     return response.json()
+    def update_app(self, app: App) -> App:
+        url = f"{self.base_url}/apps/{app.id}"
 
-    # def delete_app(self, id: str):
-    #     url = f"{self.base_url}/apps/{id}"
+        response = requests.put(url, json=app.to_service_format())
+        response.raise_for_status()
 
-    #     response = requests.delete(url)
-    #     response.raise_for_status()
+        app: App = App.from_service_format(response.json())
 
-    #     return response.json()
+        return app
+
+    def delete_app(self, id: str) -> NoReturn:
+        url = f"{self.base_url}/apps/{id}"
+
+        response = requests.delete(url)
+        response.raise_for_status()
