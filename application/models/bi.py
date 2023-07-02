@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 from typing import Dict 
 
-from pydantic import BaseModel 
+from pydantic import BaseModel
 
 class TwitterIDs(BaseModel):
     user_id: str 
