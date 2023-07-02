@@ -6,9 +6,9 @@ from application.routers.users import description as users_description
 from application.routers.apps import router as apps_router
 from application.routers.apps import tag as apps_tag
 from application.routers.apps import description as apps_description
-# from application.routers.publications import router as publications_router
-# from application.routers.publications import tag as publications_tag
-# from application.routers.publications import description as publications_description
+from application.routers.publications import router as publications_router
+from application.routers.publications import tag as publications_tag
+from application.routers.publications import description as publications_description
 from application.routers.bi import router as bi_router
 from application.routers.bi import tag as bi_tag
 from application.routers.bi import description as bi_description
@@ -41,7 +41,7 @@ app = FastAPI(
     openapi_tags=[
         {"name": users_tag, "description": users_description},
         {"name": apps_tag, "description": apps_description},
-        # {"name": publications_tag, "description": publications_description},
+        {"name": publications_tag, "description": publications_description},
         {"name": bi_tag, "description": bi_description},
     ],
     docs_url="/swaggerdocs",
@@ -50,5 +50,5 @@ app = FastAPI(
 
 app.include_router(users_router)
 app.include_router(apps_router)
-# app.include_router(publications_router)
+app.include_router(publications_router)
 app.include_router(bi_router)

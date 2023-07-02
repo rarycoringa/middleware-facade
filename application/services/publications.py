@@ -1,10 +1,11 @@
 import requests
 
 from typing import List
+from typing import NoReturn
 
 from application.services.base import BaseService
 from application.models.publications import Publication
-
+from application.models.publications import PublicationCreation
 
 class PublicationService(BaseService):
 
@@ -20,74 +21,65 @@ class PublicationService(BaseService):
     def url_env_var(self) -> str:
         return "PUBLICATION_SERVICE_URL"
 
-
-#Para todas as publicações
-    def retrieve_pubs(self ) -> List[Publication]:
+    def retrieve_publications(self) -> List[Publication]:
         url: str = f"{self.base_url}/pubs"
 
         response: requests.Response = requests.get(url)
         response.raise_for_status()
 
-        pubs: List[Publication] = [
-            Publication.formater_of_response(publication)
+        publications: List[Publication] = [
+            Publication.from_service_format(publication)
             for publication in response.json()
         ]
 
-        return pubs
+        return publications
     
-
-#Para determinada publicação pelo ID da publicação
-    def retrieve_pub(self, pub_id: int) -> Publication:
-        url = f"{self.base_url}/pubs/{pub_id}"
-
-        response = requests.Response = requests.get(url)
-        response.raise_for_status()
-
-        pub: Publication = Publication.formater_of_response(response.json())
-
-        return pub
-    
-
-#Para retornar todas as publicações de um mesmo usuário
-    def retrieve_pubs_by_user(self, user: str) -> List[Publication]:
-        url = f"{self.base_url}/pubs/user/{user}"
+    def retrieve_publication(self, id: int) -> Publication:
+        url: str = f"{self.base_url}/pubs/{id}"
 
         response: requests.Response = requests.get(url)
         response.raise_for_status()
 
-        pubs_user: List[Publication] = [
-            Publication.formater_of_response(publication)
+        publication: Publication = Publication.from_service_format(response.json())
+
+        return publication
+    
+    def retrieve_publications_by_user(self, user_id: str) -> List[Publication]:
+        url: str = f"{self.base_url}/pubs/user/{user_id}"
+
+        response: requests.Response = requests.get(url)
+        response.raise_for_status()
+
+        publications: List[Publication] = [
+            Publication.from_service_format(publication)
             for publication in response.json()
         ]
 
-        return pubs_user
+        return publications
 
 
-#Para salvar uma publicação
-    def create_pub(self, pub: Publication):
-        url = f"{self.base_url}/pubs"
+    def create_publication(self, publication_creation: PublicationCreation) -> Publication:
+        url: str = f"{self.base_url}/pubs"
 
-        response = requests.post(url, json=pub.formater_of_response())
+        response: requests.Response = requests.post(url, json=publication_creation.to_service_format())
         response.raise_for_status()
 
-        pub_create: Publication = Publication.formater_of_response(response.json())
+        publication: Publication = Publication.from_service_format(response.json())
 
-        return pub_create
+        return publication
 
+    def update_publication(self, publication: Publication) -> Publication:
+        url: str = f"{self.base_url}/pubs"
 
-#Para atualizar uma publicação
-    def update_pub(self, pub: dict):
-        url = f"{self.base_url}/pubs"
-
-        response = requests.put(url, json=pub)
+        response: requests.Response = requests.put(url, json=publication.to_service_format())
         response.raise_for_status()
 
-        return response.json()
+        publication: Publication = Publication.from_service_format(response.json())
 
+        return publication
 
-#Para deletar uma publicação pelo ID da publicação
-    def delete_pub_by_pub_id(self, pub_id: int) -> None:
-        url = f"{self.base_url}/pubs/{pub_id}"
+    def delete_publication(self, id: int) -> NoReturn:
+        url: str = f"{self.base_url}/pubs/{id}"
 
-        response = requests.delete(url)
+        response: requests.Response = requests.delete(url)
         response.raise_for_status()

@@ -1,12 +1,14 @@
 import requests
 
 from typing import List
+from typing import NoReturn
 
 from fastapi import APIRouter
 from fastapi import HTTPException
 
 from application.services.publications import PublicationService
 from application.models.publications import Publication
+from application.models.publications import PublicationCreation
 
 
 tag: str = "Publications"
@@ -16,12 +18,10 @@ description: str = """
 """
 
 router = APIRouter(
-    prefix="/pubs",
+    prefix="/publications",
     tags=[tag],
 )
 
-
-#Coletar todas as publicações
 @router.get(
     path="",
     response_model=List[Publication],
@@ -29,93 +29,84 @@ router = APIRouter(
     summary="Retrieve all publications",
     description="Retrieve a list containing all publications.",
 )
-async def retrieve_pubs() -> List[Publication]:
+async def retrieve_publications() -> List[Publication]:
     try:
-        pubs: List[Publication] = PublicationService().retrieve_pubs()
+        pubs: List[Publication] = PublicationService().retrieve_publications()
     except requests.HTTPError as error:
         raise HTTPException(error.response.status_code)
     
     return pubs
 
-
-#Coletar uma publicação específica pelo ID da publicação
 @router.get(
-    path="/{pub_id}",
+    path="/{id}",
     response_model=Publication,
     status_code=200,
-    summary="Retrieve a publication",
+    summary="Retrieve publication",
     description="Retrieve a publication by passing the publication ID.",
 )
-async def retrieve_pub(pub_id: int) -> Publication:
+async def retrieve_publication(id: int) -> Publication:
     try:
-        pub: Publication = PublicationService().retrieve_pub(pub_id)
+        publication: Publication = PublicationService().retrieve_publication(id)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status_code)
 
-    return pub
+    return publication
 
-
-#Para retornar todas as publicações de um mesmo usuário
 @router.get(
-    path="user/{user}",
+    path="/user/{user_id}",
     response_model=Publication,
     status_code=200,
-    summary="Retrieve publications of a user",
-    description="Retrieve all publications of a user passing the username.",
+    summary="Retrieve user publications",
+    description="Retrieve all publications of an user by passing the user ID.",
 )
-async def retrieve_pub(user: str) -> Publication:
+async def retrieve_publications_by_user(user_id: str) -> List[Publication]:
     try:
-        pub_user: Publication = PublicationService().retrieve_pubs_by_user(user)
+        publications: Publication = PublicationService().retrieve_publications_by_user(user_id)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status_code)
 
-    return pub_user
+    return publications
 
-
-#Para salvar uma publicação
 @router.post(
     path="",
     response_model=Publication,
     status_code=201,
-    summary="Create a publication",
-    description="Create a publication by passing the informations of the publication."
+    summary="Create publication",
+    description="Create a publication by passing the publication information."
 )
-async def create_publication(pub: Publication) -> Publication:
+async def create_publication(publication_creation: PublicationCreation) -> Publication:
     try:
-        pub_create: Publication = PublicationService().create_pub(pub)
+        pub_create: Publication = PublicationService().create_publication(publication_creation)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status_code)
 
     return pub_create
 
 
-#Para atualizar uma publicação
 @router.put(
     path="",
     response_model=Publication,
     status_code=201,
-    summary="Update a publication",
-    description="Update a publication by passing the new information of the publication."
+    summary="Update publication",
+    description="Update a publication by passing the new publication information."
 )
-async def update_pub(pub: Publication) -> Publication:
+async def update_pub(publication: Publication) -> Publication:
     try:
-        pub_update: Publication = PublicationService().update_pub(pub)
+        publication: Publication = PublicationService().update_publication(publication)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status_code)
 
-    return pub_update
+    return publication
 
-
-#Para deletar uma publicação pelo ID da publicação
 @router.delete(
-    path="pubs/{pub_id}",
+    path="{id}",
     response_model=None,
     status_code=204,
-    summary="Delete a publication",
-    description="Delete a publication by passing publication ID.",
+    summary="Delete publication",
+    description="Delete a publication by passing the publication ID.",
 )
-async def delete_pub(pub_id: int) -> None:
+async def delete_publication(id: int) -> NoReturn:
     try:
-        pub_delete: Publication = PublicationService().delete_pub_by_pub_id(pub_id)
+        PublicationService().delete_publication(id)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status_code)
