@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from application.routers.bi import router as bi_router
 
 from application.routers.users import router as users_router
 from application.routers.users import tag as users_tag
