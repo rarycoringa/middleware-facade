@@ -1,8 +1,8 @@
 import requests
 
 from application.services.base import BaseService
-from application.models.bi import IDs
-from application.models.bi import TwitterDashboardData
+from application.models.bi import TwitterIDs
+from application.models.bi import TwitterGraphics
 
 class BIService(BaseService):
 
@@ -18,13 +18,12 @@ class BIService(BaseService):
     def url_env_var(self) -> str:
      return "BI_SERVICE_URL"
 
-    def retrieve_twitter_dashboard_data(self, ids: IDs) -> TwitterDashboardData:
-        
+    def retrieve_twitter_graphics(self, twitter_ids: TwitterIDs) -> TwitterGraphics:
         url: str = f"{self.base_url}/atualizarDashTwitter"
 
-        response: requests.Response = requests.get(url, json=ids.formater_of_request())
+        response: requests.Response = requests.get(url, json=twitter_ids.to_service_format())
         response.raise_for_status()
 
-        twitter_dashboard_data: TwitterDashboardData = TwitterDashboardData.formater_of_response(response.json())
+        twitter_graphics: TwitterGraphics = TwitterGraphics.from_service_format(response.json())
 
-        return twitter_dashboard_data
+        return twitter_graphics

@@ -3,35 +3,35 @@ from __future__ import annotations
 from typing import Any
 from typing import Dict 
 
-from pydantic import baseModel 
+from pydantic import BaseModel
 
-class IDs(baseModel):
-    user_id = str 
-    twitter_user_id = str
+class TwitterIDs(BaseModel):
+    user_id: str 
+    twitter_user_id: str
 
-    def formater_of_request(self) -> Dict[str, any]:
-        formater_of_request = Dict[str, any] = {
+    def to_service_format(self) -> Dict[str, Any]:
+        service_format: Dict[str, Any] = {
             "idUsuario": self.user_id,
-            "twitter_user_id": self.twitter_user_id,
+            "idUsuarioTwitter": self.twitter_user_id,
         }
 
-        return formater_of_request
+        return service_format
 
     
-class TwitterDashboardData:
-    user_id = str
-    graph_likes_by_post = bytes
-    graph_average_likes = bytes
+class TwitterGraphics(BaseModel):
+    user_id: str
+    graph_likes_by_post: bytes
+    graph_average_likes: bytes
 
     @classmethod
-    def formater_of_response(cls, service_data:Dict[str, any]) -> TwitterDashboardData:
-        twitter_dashboard_data = Dict[str, any] = {
+    def from_service_format(cls, service_data: Dict[str, Any]) -> TwitterGraphics:
+        twitter_graphics_data: Dict[str, Any] = {
             "user_id": service_data["idUsuario"],
             "graph_likes_by_post": service_data["GraficoLikesPorPostagem"],
             "graph_average_likes": service_data["GráficoLinhaMediaLikesPorDia"],
         }
 
-        return cls.parse_obj(twitter_dashboard_data)
+        return cls.parse_obj(twitter_graphics_data)
 
         
 
