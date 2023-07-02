@@ -3,32 +3,35 @@ import requests
 from fastapi import APIRouter
 from fastapi import HTTPException
 
-from application.models.bi import IDs
-from application.models.bi import TwitterDashboardData
+from application.models.bi import TwitterIDs
+from application.models.bi import TwitterGraphics
 from application.services.bi import BIService
 
+tag: str = "BI"
 
-bi_tag: str = "BI"
+description: str = """
+
+"""
 
 router = APIRouter(
     prefix = "/bi",
-    tags = [bi_tag]
+    tags = [tag],
 )
 
 @router.get(
-    path = "",
-    reponse_model=TwitterDashboardData,
+    path="/twitter",
+    response_model=TwitterGraphics,
     status_code=200,
-    summary="Refresh Twitter dashboard",
+    summary="Retrieve Twitter graphics",
+    description="Retrieve ",
 )
-
-async def refresh_twitter_dashboard(ids: IDs) -> TwitterDashboardData:
+async def retrieve_twitter_graphics(twitter_ids: TwitterIDs) -> TwitterGraphics:
     try:
-        twitter_dashboard_data: TwitterDashboardData = BIService().refresh_twitter_dashboard(ids)
+        twitter_graphics: TwitterGraphics = BIService().retrieve_twitter_graphics(twitter_ids)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status)
     
-    return twitter_dashboard_data
+    return twitter_graphics
 
 
 
