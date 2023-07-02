@@ -3,7 +3,7 @@ import requests
 from typing import List
 
 from application.services.base import BaseService
-from application.models.publication import Publication
+from application.models.publications import Publication
 
 
 class PublicationService(BaseService):

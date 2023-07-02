@@ -5,15 +5,19 @@ from typing import List
 from fastapi import APIRouter
 from fastapi import HTTPException
 
-from application.services.publication import PublicationService
-from application.models.publication import Publication
+from application.services.publications import PublicationService
+from application.models.publications import Publication
 
 
-pubs_tag: str = "Pubs"
+tag: str = "Publications"
+
+description: str = """
+
+"""
 
 router = APIRouter(
     prefix="/pubs",
-    tags=[pubs_tag],
+    tags=[tag],
 )
 
 
