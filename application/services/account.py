@@ -57,13 +57,18 @@ class AccountService(BaseService):
 
         return user
 
-    # def retrieve_user_apps_by_id(self, id: str):
-    #     url = f"{self.base_url}/users/{id}/apps"
+    def retrieve_user_apps_by_user_id(self, user_id: str) -> List[App]:
+        url = f"{self.base_url}/users/{user_id}/apps"
 
-    #     response = requests.get(url)
-    #     response.raise_for_status()
+        response = requests.get(url)
+        response.raise_for_status()
 
-    #     return response.json()
+        apps: List[App] = [
+            App.from_service_format(app)
+            for app in response.json()
+        ]
+
+        return apps
 
     def create_user(self, user_creation: UserCreation) -> User:
         url = f"{self.base_url}/users"
@@ -75,18 +80,12 @@ class AccountService(BaseService):
 
         return user
 
-    # def create_user_with_app(self, user: dict, app: dict):
-    #     url = f"{self.base_url}/users/with-app"
-
-    #     user_with_app = {
-    #         "user": user,
-    #         "app": app,
-    #     }
-
-    #     response = requests.post(url, json=user_with_app)
-    #     response.raise_for_status()
-
-    #     return response.json()
+    def create_user_with_app(self, user: User, app: App) -> NoReturn:   
+        raise NotImplemented(
+            "Feature already satisfied with other methods."
+            " Should not be implemented at the moment to avoid"
+            " unnecessary complexity."
+        )
 
     def update_user(self, user: User) -> User:
         url = f"{self.base_url}/users"
