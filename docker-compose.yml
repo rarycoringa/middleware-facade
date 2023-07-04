@@ -1,0 +1,9 @@
+services:
+  middleware-facade:
+    build: .
+    container_name: middleware-facade
+    env_file: .env
+    volumes:
+      - .:/middleware-facade
+    ports:
+      - 8000:8000
