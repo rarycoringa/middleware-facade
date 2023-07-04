@@ -10,4 +10,4 @@ RUN pip install --no-cache-dir --upgrade pipenv==2022.12.19
 
 RUN pipenv install --deploy
 
-CMD ["pipenv", "run", "gunicorn", "application.main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
+CMD ["pipenv", "run", "gunicorn", "application.main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:80"]
