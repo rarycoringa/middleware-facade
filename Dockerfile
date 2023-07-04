@@ -4,8 +4,7 @@ WORKDIR /middleware-facade
 
 EXPOSE 8000
 
-COPY Pipfile .
-COPY Pipfile.lock .
+COPY . .
 
 RUN pip install --no-cache-dir --upgrade pipenv==2022.12.19
 
