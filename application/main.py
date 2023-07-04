@@ -27,10 +27,9 @@ Here you will be able to know how to use and enjoy all available resources on th
 ---
 
 Contributors:
-- [Rary Coringa](https://github.com/rarycoringa)
-- [Wendy Miller](https://github.com/leightonisrael)
-- [Israel Hall](https://github.com/wendymillerr)
-
+- [Rary Coringa](https://github.com/rarycoringa), *rary.goncalves.123\@ufrn.edu.br*
+- [Wendy Miller](https://github.com/leightonisrael), *wendy.moreira.114\@ufrn.edu.br*
+- [Israel Hall](https://github.com/wendymillerr), *israel.leighton.716\@ufrn.edu.br*
 
 """
 

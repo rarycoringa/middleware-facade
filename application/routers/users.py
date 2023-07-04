@@ -11,7 +11,7 @@ from application.models.users import User
 from application.models.users import UserCreation
 from application.models.users import DocumentType
 
-tag: str = "Users"
+tag: str = "USERS"
 
 description: str = """
 

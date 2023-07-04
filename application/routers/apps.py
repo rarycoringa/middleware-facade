@@ -10,7 +10,7 @@ from application.services.accounts import AccountService
 from application.models.apps import App
 from application.models.apps import AppCreation
 
-tag: str = "Apps"
+tag: str = "APPS"
 
 description: str = """
 

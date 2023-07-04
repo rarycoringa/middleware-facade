@@ -11,7 +11,7 @@ from application.models.publications import Publication
 from application.models.publications import PublicationCreation
 
 
-tag: str = "Publications"
+tag: str = "PUBLICATIONS"
 
 description: str = """
 
