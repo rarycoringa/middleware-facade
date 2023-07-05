@@ -1,5 +1,7 @@
 import requests
 
+from typing import Optional
+
 from fastapi import APIRouter
 from fastapi import HTTPException
 
@@ -25,9 +27,10 @@ router = APIRouter(
     summary="Retrieve Twitter graphics",
     description="Retrieve ",
 )
-async def retrieve_twitter_graphics(twitter_ids: TwitterIDs) -> TwitterGraphics:
+async def retrieve_twitter_graphics(user_id: str, twitter_user_id: str, mocked: bool = False) -> TwitterGraphics:
+    twitter_ids: TwitterIDs = TwitterIDs(user_id, twitter_user_id)
     try:
-        twitter_graphics: TwitterGraphics = BIService().retrieve_twitter_graphics(twitter_ids)
+        twitter_graphics: TwitterGraphics = BIService().retrieve_twitter_graphics(twitter_ids, mocked)
     except requests.HTTPError as error:
         raise HTTPException(error.response.status)
     

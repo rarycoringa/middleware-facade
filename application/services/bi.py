@@ -18,8 +18,11 @@ class BIService(BaseService):
     def url_env_var(self) -> str:
      return "BI_SERVICE_URL"
 
-    def retrieve_twitter_graphics(self, twitter_ids: TwitterIDs) -> TwitterGraphics:
-        url: str = f"{self.base_url}/atualizarDashTwitter"
+    def retrieve_twitter_graphics(self, twitter_ids: TwitterIDs, mocked: bool = False) -> TwitterGraphics:
+        if mocked:
+            url: str = f"{self.base_url}/atualizarDashTwitterMockup"
+        else:
+            url: str = f"{self.base_url}/atualizarDashTwitter"
 
         response: requests.Response = requests.get(url, json=twitter_ids.to_service_format())
         response.raise_for_status()
