@@ -37,7 +37,7 @@ async def retrieve_twitter_graphics(user_id: str, twitter_user_id: str, mocked: 
     try:
         twitter_graphics: TwitterGraphics = BIService().retrieve_twitter_graphics(twitter_ids, mocked)
     except requests.HTTPError as error:
-        raise HTTPException(error.response.status)
+        raise HTTPException(error.response.status_code)
     
     return twitter_graphics
 
